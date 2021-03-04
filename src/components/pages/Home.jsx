@@ -26,8 +26,8 @@ function Home(props) {
     <div className="container ">
       <div className="py-4">
         <h1>Home Page</h1>
-        <table class="table border shadow">
-          <thead className="thead-dark">
+        <table class="table border shadow table-bordered">
+          <thead className="thead-dark ">
             <tr>
               <th scope="col">#</th>
               <th scope="col">User Name</th>
