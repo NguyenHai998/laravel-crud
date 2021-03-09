@@ -3,9 +3,9 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-
 import { Button, IconButton, makeStyles } from "@material-ui/core";
-import AddUser from "../users/AddUser";
+import Login from "../Auth/components/Login";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyle = makeStyles((theme) => ({
   modal: {
@@ -13,9 +13,9 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 function Navbar(props) {
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
   const classes = useStyle();
-
-  const history = useHistory();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -37,6 +37,7 @@ function Navbar(props) {
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
+            z
             aria-controls="navbarNav"
             aria-expanded="false"
             aria-label="Toggle navigation"
@@ -74,7 +75,9 @@ function Navbar(props) {
         aria-labelledby="form-dialog-title"
       >
         <IconButton onClick={handleClose}></IconButton>
-        <DialogContent className={classes.modal}>sdlknsf</DialogContent>
+        <DialogContent className={classes.modal}>
+          <Login closeDinalog={handleClose} />
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel

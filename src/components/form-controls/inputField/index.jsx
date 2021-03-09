@@ -11,7 +11,7 @@ InputField.propTypes = {
 };
 
 function InputField(props) {
-  const { form, name, lable, disabled } = props;
+  const { form, name, label, disabled } = props;
   const { errors } = form;
   const hasError = errors[name];
   return (
@@ -22,7 +22,7 @@ function InputField(props) {
       margin="normal"
       variant="outlined"
       fullWidth
-      label={lable}
+      label={label}
       disabled={disabled}
       error={!!hasError}
       helperText={errors[name]?.message}
