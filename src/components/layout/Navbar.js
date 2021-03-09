@@ -4,7 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, IconButton, makeStyles } from "@material-ui/core";
 import AddUser from "../users/AddUser";
 
 const useStyle = makeStyles((theme) => ({
@@ -64,7 +64,7 @@ function Navbar(props) {
           </div>
 
           <Link className="btn btn-outline-light" onClick={handleClickOpen}>
-            Add User
+            Login
           </Link>
         </div>
       </nav>
@@ -73,9 +73,8 @@ function Navbar(props) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogContent className={classes.modal}>
-          <AddUser handleClose={handleClose} />
-        </DialogContent>
+        <IconButton onClick={handleClose}></IconButton>
+        <DialogContent className={classes.modal}>sdlknsf</DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel

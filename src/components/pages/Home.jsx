@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import axios from "axios";
 import customerApi from "../../api/customerApi";
 import { Link } from "react-router-dom";
+import {
+  Button,
+  Collapse,
+  Dialog,
+  IconButton,
+  makeStyles,
+} from "@material-ui/core";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import AddUser from "../users/AddUser";
 
 Home.propTypes = {};
+const useStyle = makeStyles((theme) => ({
+  modal: {
+    width: "550px",
+  },
+}));
 
 function Home(props) {
+  const classes = useStyle();
   const [users, setUsers] = useState([]);
   useEffect(() => {
     loadUsers();
@@ -21,11 +35,23 @@ function Home(props) {
     await customerApi.remove(id);
     loadUsers();
   };
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className="container ">
       <div className="py-4">
         <h1>Home Page</h1>
+        <Link className="btn btn-primary mb-3" onClick={handleClickOpen}>
+          Add User
+        </Link>
         <table class="table border shadow table-bordered">
           <thead className="thead-dark ">
             <tr>
@@ -67,6 +93,21 @@ function Home(props) {
             ))}
           </tbody>
         </table>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <IconButton onClick={handleClose}></IconButton>
+          <DialogContent className={classes.modal}>
+            <AddUser handleClose={handleClose} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );
