@@ -25,7 +25,7 @@ function Login(props) {
       enqueueSnackbar("Đăng nhập thành công!", { variant: "success" });
     } catch (error) {
       console.log("Fail to Login: ", error);
-      enqueueSnackbar(error.message, { variant: "error" });
+      enqueueSnackbar("Sai tài khoản hoặc mật khẩu", { variant: "error" });
     }
   };
 

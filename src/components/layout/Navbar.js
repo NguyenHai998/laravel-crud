@@ -3,20 +3,31 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import { Button, IconButton, makeStyles } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  makeStyles,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
 import Login from "../Auth/components/Login";
 import { useDispatch, useSelector } from "react-redux";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { logout } from "../Auth/userSlice";
 
 const useStyle = makeStyles((theme) => ({
   modal: {
     width: "550px",
   },
 }));
+
 function Navbar(props) {
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
   const classes = useStyle();
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,6 +35,19 @@ function Navbar(props) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleUserClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogoutClick = () => {
+    const action = logout();
+    dispatch(action);
   };
   return (
     <div>
@@ -63,10 +87,17 @@ function Navbar(props) {
               </li>
             </ul>
           </div>
+          {!isLoggedIn && (
+            <Link className="btn btn-outline-light" onClick={handleClickOpen}>
+              Login
+            </Link>
+          )}
 
-          <Link className="btn btn-outline-light" onClick={handleClickOpen}>
-            Login
-          </Link>
+          {isLoggedIn && (
+            <IconButton onClick={handleUserClick}>
+              <AccountCircleIcon />
+            </IconButton>
+          )}
         </div>
       </nav>
       <Dialog
@@ -84,6 +115,24 @@ function Navbar(props) {
           </Button>
         </DialogActions>
       </Dialog>
+      <Menu
+        keepMounted
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        getContentAnchorEl={null}
+      >
+        <MenuItem onClick={handleCloseMenu}>My Account</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      </Menu>
     </div>
   );
 }

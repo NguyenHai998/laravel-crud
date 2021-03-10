@@ -52,9 +52,9 @@ function UserForm(props) {
   };
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <InputField form={form} lable="First Name" name="first_name" />
-      <InputField form={form} lable="Last Name" name="last_name" />
-      <InputField form={form} lable="Email" name="email" />
+      <InputField form={form} label="First Name" name="first_name" />
+      <InputField form={form} label="Last Name" name="last_name" />
+      <InputField form={form} label="Email" name="email" />
       <Button
         variant="contained"
         className={classes.submit}
