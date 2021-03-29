@@ -1,45 +1,60 @@
 import axios from "axios";
+import DomainKeys from "../constants/Domain-key";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost/api/",
-  headers: { "X-Requested-With": "XMLHttpRequest" },
+  baseURL: `http://${DomainKeys.DOMAIN}/api/`,
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    "X-Requested-With": "XMLHttpRequest",
+  },
 });
-
 //Interceptors
 
 // Add a request interceptor
 axiosClient.interceptors.request.use(
-  function (config) {
+  (config) => {
     // Do something before request is sent
     return config;
   },
-  function (error) {
+  (error) => {
     // Do something with request error
     return Promise.reject(error);
   }
 );
 
 // Add a response interceptor
-axiosClient.interceptors.response.use(
-  function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    return response.data;
-  },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    console.log("ERROR RESPONSE", error.response);
-    const { config, status, data } = error.response;
 
-    if (config.url === "/customers" && status === 400) {
+axiosClient.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    console.log("ERROR RESPONSE", error.response);
+    const { status, data } = error.response;
+
+    if (status === 400) {
       const errorList = data.message;
-      // const firstError = errorList.length > 0 ? errorList[0] : {};
       const errorEmail = errorList.email;
       console.log(errorEmail);
       throw new Error(errorEmail);
     }
 
+    if (status === 401 && data.message === "Unauthenticated.") {
+      console.log("Coi Loi roi 401 token het han");
+      axiosClient
+        .post("auth/refresh-token", {
+          refresh_token: localStorage.getItem("refresh_token"),
+        })
+        .then(function (response) {
+          localStorage.setItem("access_token", response.access_token);
+          window.location.reload();
+        })
+        .catch(function (response) {
+          if (status === 401 && data.message === "Unauthenticated.") {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            window.location.reload();
+          }
+        });
+    }
     return Promise.reject(error);
   }
 );

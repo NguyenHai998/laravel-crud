@@ -1,27 +1,23 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import userApi from "../../api/userApi";
 
 export const login = createAsyncThunk("users/login", async (payload) => {
   const data = await userApi.login(payload);
 
   localStorage.setItem("access_token", data.access_token);
-  localStorage.setItem("user", JSON.stringify(data.user));
+  localStorage.setItem("refresh_token", data.refresh_token);
 
   return data.user;
 });
 
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    current: JSON.parse(localStorage.getItem("user")) || {},
-    setting: {},
-  },
+  initialState: {},
   reducers: {
     logout(state) {
       // clear local storage
-
       localStorage.removeItem("access_token");
-      localStorage.removeItem("user");
+      localStorage.removeItem("refresh_token");
       state.current = {};
     },
   },

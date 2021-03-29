@@ -1,9 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 About.propTypes = {};
 
-function About(props) {
+function About() {
   return (
     <div className="container">
       <div className="py-4">

@@ -3,12 +3,13 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import React from "react";
 import { useDispatch } from "react-redux";
-import LoginForm from "../LoginForm ";
 import { login } from "../../userSlice";
+import LoginForm from "../LoginForm ";
 
 Login.propTypes = { closeDinalog: PropTypes.func };
 
 function Login(props) {
+  const { closeDinalog } = props;
   const dispath = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -16,13 +17,15 @@ function Login(props) {
     try {
       const action = login(values);
       const resultAction = await dispath(action);
-      const user = unwrapResult(resultAction);
+      unwrapResult(resultAction);
 
-      const { closeDinalog } = props;
       if (closeDinalog) {
         closeDinalog();
       }
       enqueueSnackbar("Đăng nhập thành công!", { variant: "success" });
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     } catch (error) {
       console.log("Fail to Login: ", error);
       enqueueSnackbar("Sai tài khoản hoặc mật khẩu", { variant: "error" });

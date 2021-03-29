@@ -1,4 +1,3 @@
-import { configure } from "@testing-library/react";
 import userReducer from "../components/Auth/userSlice";
 const { configureStore } = require("@reduxjs/toolkit");
 
